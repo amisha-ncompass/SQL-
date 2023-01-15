@@ -1,0 +1,110 @@
+create database Amisha;
+show databases;
+use Amisha;
+
+create table customers(
+CUST_CODE int,
+CUST_NAME varchar(100),
+CUST_CITY varchar(50),
+PHONE_NO varchar(15),
+primary key (CUST_CODE),
+AGENT_CODE varchar(10)
+);
+
+show tables;
+show columns from customers;
+
+alter table customers modify CUST_CODE varchar(10);
+show columns from customers;
+
+insert into customers values('C001','Albert','Chenna','979886576','A001');
+select * from customers;
+insert into customers values('C002','Ravi','Bangalore','9876123456','A002'),
+                             ('C003','Archana','Chennai','94523098123','A004'),
+							 ('C004','Riya','Trichy','9612309876','A002'),
+                             ('C005','Pavithra','Kanyakumari','9612309856','A005');
+                             
+create table agent(
+ AGENT_CODE varchar(10),
+ AGENT_NAME varchar(100),
+ COUNTRY varchar(20),
+ PHONE_NO varchar(20),
+ STATUS_ bool,
+ 
+ PRIMARY KEY (AGENT_CODE)
+ 
+ );
+ 
+ insert into agent VALUES('A001','Joe','Canada','2345623452',0),
+('A002','Sara','India','1234567890',1),
+('A003','Wiley','Bahamas','987654321',1),
+('A004','Katniss','Ireland','3456543698',1),
+('A005','Arjun','India','9844342345',0);
+ 
+ select * from agent;
+ 
+ create table order_table(
+ ORDER_NUM varchar(10),
+ CUST_CODE varchar(10),
+ AGENT_CODE varchar(10),
+ AMOUNT float,
+ ORDER_DATE date,
+ PRIMARY KEY (ORDER_NUM),
+ FOREIGN KEY (AGENT_CODE) REFERENCES agent(AGENT_CODE),
+ FOREIGN KEY (CUST_CODE) REFERENCES customers(CUST_CODE)
+ );
+ 
+ alter table order_table modify ORDER_DATE varchar(20);
+ 
+ insert into order_table values('O001','C001','A001',50000.5,'44532'),
+						 ('O002','C002','A002',3000.35,'26/03/2021'),
+                         ('O003','C005','A004',25000.1,'21/01/2021'),
+                         ('O004','C004','A003',6000.5,'44350'),
+                         ('O006','C004','A005',100000.4,'13/09/2019');
+ 
+ select * from order_table;
+ 
+ ALTER TABLE customers ADD foreign key (AGENT_CODE) REFERENCES agent(AGENT_CODE);
+ 
+ show columns from customers;
+ show columns from agent;
+ show columns from order_table;
+ 
+ 
+ alter table agent add commission float; 
+ update agent set commission =0.2 where AGENT_CODE ='A001';
+ SELECT * FROM agent;
+ update agent set commission =0.96 where AGENT_CODE ='A002';
+ SELECT * FROM agent;
+ update agent set commission =0.23 where AGENT_CODE ='A003';
+ SELECT * FROM agent;
+update agent set commission =0.12 where AGENT_CODE ='A004';
+ SELECT * FROM agent;
+ update agent set commission =0.76 where AGENT_CODE ='A005';
+ SELECT * FROM agent;
+ 
+/* deleteing Phone_no from agent table */
+
+ alter table agent drop Phone_No;
+ 
+/* renae commission as "comiision_percentage" */
+
+alter table agent rename column commission to Commission_Percentage;
+ 
+/*  copy of agent table as "agent_details" and delete old table as agent */
+
+ create table agent_details like agent;
+ insert into agent_details select * from agent;
+ select * from agent_details;
+  SET FOREIGN_KEY_CHECKS = 0; 
+  drop table agent;
+  SET FOREIGN_KEY_CHECKS = 1; 
+ /* delete all the order table records in a single command */
+
+ truncate table order_table;
+
+ 
+ /* alter the order table*/
+ ALTER TABLE order_table ALTER  Amount SET DEFAULT 100;
+ desc order_table;
+
